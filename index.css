@@ -34,8 +34,22 @@
     font-family: system-ui;
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
 header,
 footer,
 section {
     background: var(--carbon-black, black);
+    border-radius: 12px;
+    box-sizing: border-box;
+    padding: 0.5rem;
+}
+
+header h1,
+footer h5 {
+    margin: 0;
 }
