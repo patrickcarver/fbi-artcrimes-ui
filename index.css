@@ -1,0 +1,41 @@
+@property --black {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #08090aff;
+}
+
+@property --lilac-ash {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #a7a2a9ff;
+}
+
+@property --bright-snow {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #f4f7f5ff;
+}
+
+@property --charcoal {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #575a5eff;
+}
+
+@property --carbon-black {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #222823ff;
+}
+
+:root {
+    background: var(--black, black);
+    color: var(--bright-snow, white);
+    font-family: system-ui;
+}
+
+header,
+footer,
+section {
+    background: var(--carbon-black, black);
+}

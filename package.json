@@ -1,0 +1,16 @@
+{
+  "name": "fbi-artcrime",
+  "version": "1.0.0",
+  "description": "Display info from the FBI's art crime API",
+  "license": "ISC",
+  "author": "Patrick Carver",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "lit": "^3.3.2",
+    "vite": "^7.3.1"
+  }
+}
