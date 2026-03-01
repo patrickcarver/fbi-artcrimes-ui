@@ -1,0 +1,83 @@
+export class ApiClient {
+  #attempt;
+  #apiUrl;
+  #maxRetries;
+  #baseDelayMilliseconds;
+  #httpOptions;
+
+  constructor(options) {
+    this.#apiUrl = options.apiUrl;
+    this.#maxRetries = options.maxRetries || 3;
+    this.#baseDelayMilliseconds = options.baseDelayMilliseconds || 1000;
+    this.#httpOptions = options.httpOptions || {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    };
+
+    if (
+      options.apiUrl !== null &&
+      options.apiUrl !== "" &&
+      options.apiUrl !== undefined
+    ) {
+      this.#apiUrl = options.apiUrl;
+    } else {
+      throw new Error("API URL is required");
+    }
+  }
+
+  #is4xx(status) {
+    return status >= 400 && status <= 499;
+  }
+
+  #is5xx(status) {
+    return status >= 500 && status <= 599;
+  }
+
+  #sleep() {
+    return new Promise((resolve) => {
+      setTimeout(resolve, this.#baseDelayMilliseconds);
+    });
+  }
+
+  #exponentialBackoffMilliseconds(attempt) {
+    return this.#baseDelayMilliseconds * 2 ** (attempt - 1);
+  }
+
+  async #retryWithBackoff(errorMessage, attempt) {
+    attempt++;
+    const finalErrorMessage = `Maximum retries (${this.#maxRetries}) reached: ${errorMessage}`;
+    if (attempt > this.#maxRetries) throw new Error(finalErrorMessage);
+
+    const backoffMilliseconds = this.#exponentialBackoffMilliseconds(attempt);
+    await this.#sleep(backoffMilliseconds);
+
+    return this.fetchWithRetry(attempt);
+  }
+
+  async fetchWithRetry(attempt = 1) {
+    try {
+      const response = await fetch(this.#apiUrl, this.#httpOptions);
+
+      if (response.ok) return await response.json();
+
+      if (this.#is5xx(response.status)) {
+        const errorMessage = `Received this 5xx status code error: ${response.status}`;
+        return this.#retryWithBackoff(errorMessage, attempt);
+      }
+
+      if (this.#is4xx(response.status)) {
+        const errorMessage = `Unable to retry on 4xx status code error: ${response.status}`;
+        throw new Error(errorMessage);
+      }
+
+      throw new Error(`HTTP error! status: ${response.status}`);
+    } catch (error) {
+      if (error instanceof TypeError) {
+        return this.#retryWithBackoff(error.message, attempt);
+      }
+      throw error;
+    }
+  }
+}
