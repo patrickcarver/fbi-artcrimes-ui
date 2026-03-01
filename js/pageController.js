@@ -1,4 +1,4 @@
-import { config } from "./config.js";
+import { ApiClient } from "./apiClient.js";
 
 export class PageController {
   #host = null;
@@ -7,9 +7,12 @@ export class PageController {
     number: 1,
   });
   #pageData = null;
+  #apiClient = null;
 
-  constructor(host) {
-    this.#host.addController(host);
+  constructor(host, httpOptions = {}) {
+    this.#host = host;
+    host.addController(this);
+    this.#apiClient = new ApiClient(httpOptions);
   }
 
   get pageData() {
@@ -18,7 +21,8 @@ export class PageController {
 
   async hostConnected() {
     try {
-      // const response = await fetchFromUrl(config.apiUrl);
+      // const response = await fetchWithRetry(config.apiUrl);
+      //
     } catch (error) {}
   }
 }

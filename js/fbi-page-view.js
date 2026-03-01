@@ -2,6 +2,7 @@ import { LitElement, html, css } from "lit";
 import { Task } from "@lit/task";
 import { FbiPageGrid } from "./fbi-view-grid.js";
 import { PageController } from "./pageController.js";
+import { config } from "./config.js";
 
 export class FbiPageView extends LitElement {
   static styles = css`
@@ -16,7 +17,7 @@ export class FbiPageView extends LitElement {
     pageNumber: { type: Number },
   };
 
-  #pageController = new PageController(this);
+  #pageController = new PageController(this, config);
 
   constructor() {
     super();
