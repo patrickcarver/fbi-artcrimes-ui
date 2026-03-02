@@ -7,6 +7,8 @@ export class FbiPageGrid extends LitElement {
     }
   `;
 
+  static properties = {};
+
   render() {
     return html`view grid`;
   }

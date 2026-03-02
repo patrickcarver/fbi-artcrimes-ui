@@ -1,24 +1,25 @@
 import { ApiClient } from "./apiClient.js";
+import { mapPageData } from "./mapPageData.js";
 
 export class PageController {
   #host = null;
   #pageData = null;
   #apiClient = null;
-  #cache = null;
+  #pageCache = null;
+  #url = null;
 
-  constructor(host, httpOptions) {
+  constructor(host, config) {
     this.#host = host;
     host.addController(this);
-    this.#apiClient = new ApiClient(httpOptions);
+    this.#pageCache = new Map();
+    this.#apiClient = new ApiClient(config);
+    this.#url = config.url;
   }
 
-  get pageData() {
-    return this.#pageData();
-  }
-
-  async loadPage({ number = 1, size = 12 } = {}) {
+  async loadPage({ page = 1, pageSize = 12 } = {}) {
     try {
-      return await this.#apiClient.fetchWithRetry({ number, size });
+      const response = await this.#apiClient.fetchWithRetry({ page, pageSize });
+      return mapPageData(response, this.#url);
     } catch (error) {
       console.error(error);
     }

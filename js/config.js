@@ -1,5 +1,9 @@
 export const config = {
-  apiUrl: "https://api.fbi.gov/artcrimes/list",
+  url: {
+    api: "https://api.fbi.gov/artcrimes/list",
+    image: "https://artcrimes.fbi.gov",
+    link: "https://www.fbi.gov",
+  },
   fetch: {
     maxRetries: 3,
     baseDelayMilliseconds: 1000,

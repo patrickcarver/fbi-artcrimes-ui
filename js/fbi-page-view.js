@@ -19,6 +19,12 @@ export class FbiPageView extends LitElement {
 
   #pageController = null;
 
+  #fetchPage = new Task(this, {
+    task: ([pageNumber, pageSize]) =>
+      this.#pageController.loadPage({ number: pageNumber, size: pageSize }),
+    args: () => [this.pageNumber, this.pageSize],
+  });
+
   constructor() {
     super();
     this.pageData = {};
@@ -27,16 +33,10 @@ export class FbiPageView extends LitElement {
     this.#pageController = new PageController(this, config);
   }
 
-  #fetchPage = new Task(this, {
-    task: ([pageNumber, pageSize]) =>
-      this.#pageController.loadPage({ number: pageNumber, size: pageSize }),
-    args: () => [this.pageNumber, this.pageSize],
-  });
-
   render() {
     return this.#fetchPage.render({
       pending: () => html`<span>Loading...</span>`,
-      complete: (data) => html`<pre>${JSON.stringify(data, null, 2)}</pre>`,
+      complete: (data) => html`<pre>${data.get("pageNumber")}</pre>`,
       error: (error) => html`<span>Error: ${error.message}</span>`,
     });
   }

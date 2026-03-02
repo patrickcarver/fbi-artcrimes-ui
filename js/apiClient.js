@@ -6,10 +6,10 @@ export class ApiClient {
   #httpOptions;
 
   constructor(options) {
-    this.#apiUrl = options.apiUrl;
-    this.#maxRetries = options.fetch.maxRetries || 3;
-    this.#baseDelayMilliseconds = options.fetch.baseDelayMilliseconds || 1000;
-    this.#httpOptions = options.fetch.httpOptions || {
+    this.#apiUrl = options.url?.api;
+    this.#maxRetries = options.fetch?.maxRetries || 3;
+    this.#baseDelayMilliseconds = options.fetch?.baseDelayMilliseconds || 1000;
+    this.#httpOptions = options.fetch?.httpOptions || {
       method: "GET",
       headers: {
         accept: "application/json",
@@ -17,11 +17,11 @@ export class ApiClient {
     };
 
     if (
-      options.apiUrl !== null &&
-      options.apiUrl !== "" &&
-      options.apiUrl !== undefined
+      options.url?.api !== null &&
+      options.url?.api !== "" &&
+      options.url?.api !== undefined
     ) {
-      this.#apiUrl = options.apiUrl;
+      this.#apiUrl = options.url?.api;
     } else {
       throw new Error("API URL is required");
     }
