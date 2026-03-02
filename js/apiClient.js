@@ -7,9 +7,9 @@ export class ApiClient {
 
   constructor(options) {
     this.#apiUrl = options.apiUrl;
-    this.#maxRetries = options.maxRetries || 3;
-    this.#baseDelayMilliseconds = options.baseDelayMilliseconds || 1000;
-    this.#httpOptions = options.httpOptions || {
+    this.#maxRetries = options.fetch.maxRetries || 3;
+    this.#baseDelayMilliseconds = options.fetch.baseDelayMilliseconds || 1000;
+    this.#httpOptions = options.fetch.httpOptions || {
       method: "GET",
       headers: {
         accept: "application/json",
@@ -45,7 +45,7 @@ export class ApiClient {
     return this.#baseDelayMilliseconds * 2 ** (attempt - 1);
   }
 
-  async #retryWithBackoff(errorMessage, attempt) {
+  async #retryWithBackoff(params, errorMessage, attempt) {
     attempt++;
     const finalErrorMessage = `Maximum retries (${this.#maxRetries}) reached: ${errorMessage}`;
     if (attempt > this.#maxRetries) throw new Error(finalErrorMessage);
@@ -53,18 +53,21 @@ export class ApiClient {
     const backoffMilliseconds = this.#exponentialBackoffMilliseconds(attempt);
     await this.#sleep(backoffMilliseconds);
 
-    return this.fetchWithRetry(attempt);
+    return this.fetchWithRetry(params, attempt);
   }
 
-  async fetchWithRetry(attempt = 1) {
+  async fetchWithRetry(params, attempt = 1) {
     try {
-      const response = await fetch(this.#apiUrl, this.#httpOptions);
+      const url = `${this.#apiUrl}?${new URLSearchParams(params).toString()}`;
+      const response = await fetch(url, this.#httpOptions);
 
-      if (response.ok) return await response.json();
+      if (response.ok) {
+        return await response.json();
+      }
 
       if (this.#is5xx(response.status)) {
         const errorMessage = `Received this 5xx status code error: ${response.status}`;
-        return this.#retryWithBackoff(errorMessage, attempt);
+        return this.#retryWithBackoff(params, errorMessage, attempt);
       }
 
       if (this.#is4xx(response.status)) {
@@ -75,7 +78,7 @@ export class ApiClient {
       throw new Error(`HTTP error! status: ${response.status}`);
     } catch (error) {
       if (error instanceof TypeError) {
-        return this.#retryWithBackoff(error.message, attempt);
+        return this.#retryWithBackoff(params, error.message, attempt);
       }
       throw error;
     }
