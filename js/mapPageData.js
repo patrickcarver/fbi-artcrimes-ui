@@ -45,9 +45,11 @@ const mapItem = (item, url) => {
   const additionalData = sanitizeString(item.additionalData);
   const title = sanitizeString(item.title);
   const linkUrl = sanitizeUrl(item.url, url.link);
-  const measurements = sanitizeString(item.measurements);
-  const materials = sanitizeString(item.materials);
-  const maker = sanitizeString(item.maker);
+  const measurements = item.measurements
+    ? sanitizeString(item.measurements)
+    : "Unknown";
+  const materials = item.materials ? sanitizeString(item.materials) : "Unknown";
+  const maker = item.maker ? sanitizeString(item.maker) : "Unknown";
   const crimeCategory = sanitizeString(item.crimeCategory);
 
   return {

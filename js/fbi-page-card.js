@@ -36,23 +36,25 @@ export class FbiPageCard extends LitElement {
       <div>${this.item.description}</div>
       ${when(
         this.item.additionalData !== "",
-        () => html`<div>${this.item.additionalData}</div>`,
+        () =>
+          html` <section>
+            <span>Additional Info:</span>
+            <span>${this.item.additionalData}</span>
+          </section>`,
         () => nothing,
       )}
-      <table>
-        <tr>
-          <td>Measurements:</td>
-          <td>${this.item.measurements}</td>
-        </tr>
-        <tr>
-          <td>Materials:</td>
-          <td>${this.item.materials}</td>
-        </tr>
-        <tr>
-          <td>Crime Category:</td>
-          <td>${this.item.crimeCategory}</td>
-        </tr>
-      </table>
+      <section>
+        <span>Measurements:</span>
+        <span>${this.item.measurements}</span>
+      </section>
+      <section>
+        <span>Materials:</span>
+        <span>${this.item.materials}</span>
+      </section>
+      <section>
+        <span>Crime Category:</span>
+        <span>${this.item.crimeCategory}</span>
+      </section>
     `;
   }
 }

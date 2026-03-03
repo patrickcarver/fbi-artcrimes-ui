@@ -34,6 +34,7 @@
     --primary-background-color: var(--charcoal, #575a5eff);
     --border-color: var(--lilac-ash, #a7a2a9ff);
     --secondary-border-color: var(--carbon-black, #222823ff);
+    --button-color: var(--lilac-ash, #a7a2a9ff);
     background: var(--root-background-color);
     color: var(--primary-text-color);
     font-family: system-ui;

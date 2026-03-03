@@ -5,6 +5,12 @@ export class FbiNavBar extends LitElement {
     :host {
       display: block;
     }
+
+    button {
+      background: var(--button-color, gray);
+      border: 1px var(--secondary-border-color: black);
+      border-radius: 3px;
+    }
   `;
 
   static properties = {
