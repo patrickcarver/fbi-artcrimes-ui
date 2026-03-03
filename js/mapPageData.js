@@ -39,8 +39,8 @@ const sanitizeImages = (images, imageUrl) =>
     : [];
 
 const mapItem = (item, url) => {
+  const uid = sanitizeString(item.uid);
   const images = sanitizeImages(item.images, url.image);
-
   const description = sanitizeString(item.description);
   const additionalData = sanitizeString(item.additionalData);
   const title = sanitizeString(item.title);
@@ -51,6 +51,7 @@ const mapItem = (item, url) => {
   const crimeCategory = sanitizeString(item.crimeCategory);
 
   return {
+    uid,
     images,
     description,
     additionalData,

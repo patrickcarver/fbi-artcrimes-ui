@@ -31,9 +31,11 @@
 :root {
     --root-background-color: var(--black, #08090aff);
     --primary-text-color: var(--bright-snow, #f4f7f5ff);
-
+    --primary-background-color: var(--charcoal, #575a5eff);
+    --border-color: var(--lilac-ash, #a7a2a9ff);
+    --secondary-border-color: var(--carbon-black, #222823ff);
     background: var(--root-background-color);
-    color: var(--primary-text-color, white);
+    color: var(--primary-text-color);
     font-family: system-ui;
 }
 
@@ -57,11 +59,11 @@ main {
 header,
 footer,
 section {
-    background: var(--carbon-black, darkgray);
+    background: var(--carbon-black);
     border-radius: 12px;
     box-sizing: border-box;
     padding: 0.5rem;
-    border: 1px solid var(--charcoal, #575a5eff);
+    border: 1px solid var(--border-color);
 }
 
 header h1,
