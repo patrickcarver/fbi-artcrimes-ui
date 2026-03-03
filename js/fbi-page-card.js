@@ -30,7 +30,7 @@ export class FbiPageCard extends LitElement {
 
   render() {
     return html`
-      <img src="${this.item.images[0].original}" />
+      <img src="${this.item.images[0]?.original}" />
       <span class="title">${this.item.title}</span>
       <span>By ${this.item.maker}</span>
       <div>${this.item.description}</div>
